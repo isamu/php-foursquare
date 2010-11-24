@@ -2,7 +2,31 @@
 
 class Foursquare{
     private $base_url = "http://api.foursquare.com/v1/";
-    private $auth = null;
+    private $method = array("checkins" => array("get", true),
+                            "checkin" => array("post", true),
+                            "history" => array("get", true),
+                            "user" => array("get", true),
+                            "friends" => array("get", true),
+                            "venues" => array("get", false),
+                            "venue" => array("get", false),
+                            "categories" => array("get", false),
+                            "addvenue" => array("post", true),
+                            "venue/proposeedit" => array("post", true),
+                            "venue/flagclosed" => array("post", true),
+                            "tips" => array("get", false),
+                            "addtip" => array("post", true),
+                            "tip/marktodo" => array("post", true),
+                            "tip/markdone" => array("post", true),
+                            "tip/unmark" => array("post", true),
+                            "friend/requests" => array("get", true),
+                            "friend/approve" => array("post", true),
+                            "friend/deny" => array("post", true),
+                            "findfriends/byname" => array("get", true),
+                            "findfriends/byphone" => array("get", true),
+                            "findfriends/bytwitter" => array("get", true),
+                            "settings/setpings"  => array("post", true),
+                            "test" => array("get", false));
+
     function __construct(&$auth=NULL){
         $this->auth = & $auth;
     }
@@ -24,14 +48,13 @@ class Foursquare{
     function get($url, $param, $require_auth = true){
         return $this->fetch($url, $param, "GET", $require_auth);
     }
-    function tips($params){
-        return $this->get("tips", $params);
-    }
-    function venues($params){
-        return $this->get("venues", $params, false);
-    }
-    function checkin($params){
-        return $this->post("checkin", $params);
+    function __call($methodName, $args){
+        $methodName = preg_replace("/\_/", "/", $methodName);
+        if($this->method[$methodName]){
+            return $this->{$this->method[$methodName][0]}($methodName, (array) $args[0], $this->method[$methodName][1]);
+        }else{
+            throw new Exception("No method exists");
+        }
     }
 }
 
