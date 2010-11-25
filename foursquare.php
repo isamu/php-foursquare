@@ -6,8 +6,8 @@
  *
  * @category   HTTP
  * @package    php-foursquare
- * @author     Isamu Arimoto <@gmail.com>
- * @copyright  2010 Isamu Arimoto <@gmail.com>
+ * @author     Isamu Arimoto
+ * @copyright  2010 Isamu Arimoto
  * @license    http://www.opensource.org/licenses/mit-license.php MIT License
  * @link       https://github.com/isamu/php-foursquare/
  *
