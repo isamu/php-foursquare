@@ -30,33 +30,36 @@ class Foursquare{
     function __construct(&$auth=NULL){
         $this->auth = & $auth;
     }
-    function fetch($url, $param, $method, $require_auth = true){
+    private function fetch($url, $param, $method, $require_auth = true){
         if(get_class($this->auth) == "OAuth"){
             if($this->auth->fetch($this->base_url . $url, $param, ($method=="GET") ? OAUTH_HTTP_METHOD_GET : OAUTH_HTTP_METHOD_POST)){
                 return $this->auth->getLastResponse();
             }
         }else if(get_class($this->auth) == "HTTP_OAuth_Consumer"){
-            $res = $this->auth->sendRequest($this->base_url . $url, $param, $method);
-            switch($res->response->getStatus()) {
-            case 200:
-                return $res->getBody();
-            case 501:
-                throw new Exception("Invalid Attribute Value");
-            case 400:
-                throw new Exception("Quota exceeded");
-            case 401:
-                throw new Exception("Authentication failed");
-            }
+            return $this->fetch_http_oauth($url, $param, $method);
         }else if(!$require_auth){
             return "not impliment";
         }else{
             throw new Exception("This API needs authentication");
         }
     }
-    function post($url, $param, $require_auth = true){
+    private function fetch_http_oauth($url, $param, $method){
+        $res = $this->auth->sendRequest($this->base_url . $url, $param, $method);
+        switch($res->response->getStatus()) {
+        case 200:
+            return $res->getBody();
+        case 501:
+            throw new Exception("Invalid Attribute Value");
+        case 400:
+            throw new Exception("Quota exceeded");
+        case 401:
+            throw new Exception("Authentication failed");
+        }
+    }
+    private function post($url, $param, $require_auth = true){
         return $this->fetch($url, $param, "POST", $require_auth);
     }
-    function get($url, $param, $require_auth = true){
+    private function get($url, $param, $require_auth = true){
         return $this->fetch($url, $param, "GET", $require_auth);
     }
     function __call($methodName, $args){
