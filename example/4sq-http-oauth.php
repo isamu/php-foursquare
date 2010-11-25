@@ -30,13 +30,13 @@ $oauth->setTokenSecret($oauth->getTokenSecret());
 $forsq = new Foursquare($oauth);
 
 $res = $forsq->findfriends_byname(array("q" => "isamu"));
-var_dump($res->getBody());
+var_dump($res);
 
 $res = $forsq->venues(array("geolat" => 35.652101, 
                             "geolong" => 139.333334));
 
-var_dump($res->getBody());
+var_dump($res);
 
 $res = $forsq->checkin(array("vid" =>1181151));
-var_dump($res->getBody());
+var_dump($res);
 exit;

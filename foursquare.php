@@ -32,10 +32,21 @@ class Foursquare{
     }
     function fetch($url, $param, $method, $require_auth = true){
         if(get_class($this->auth) == "OAuth"){
-            $this->auth->fetch($this->base_url . $url, $param, ($method=="GET") ? OAUTH_HTTP_METHOD_GET : OAUTH_HTTP_METHOD_POST);
-            return $this->auth->getLastResponse();
+            if($this->auth->fetch($this->base_url . $url, $param, ($method=="GET") ? OAUTH_HTTP_METHOD_GET : OAUTH_HTTP_METHOD_POST)){
+                return $this->auth->getLastResponse();
+            }
         }else if(get_class($this->auth) == "HTTP_OAuth_Consumer"){
-            return $this->auth->sendRequest($this->base_url . $url, $param, $method);
+            $res = $this->auth->sendRequest($this->base_url . $url, $param, $method);
+            switch($res->response->getStatus()) {
+            case 200:
+                return $res->getBody();
+            case 501:
+                throw new Exception("Invalid Attribute Value");
+            case 400:
+                throw new Exception("Quota exceeded");
+            case 401:
+                throw new Exception("Authentication failed");
+            }
         }else if(!$require_auth){
             return "not impliment";
         }else{
