@@ -48,6 +48,13 @@ class Services_Foursquare
                             'settings/setpings'  => array('post', true),
                             'test' => array('get', false));
 
+    /**
+     * Construct
+     *
+     * @param mixed $auth Object of OAuth or HTTP_OAuth_Consumer
+     *
+     * @return void
+     */
     public function __construct(&$auth=NULL)
     {
         $this->auth = & $auth;
@@ -85,16 +92,28 @@ class Services_Foursquare
         }
     }
 
+    /**
+     * HTTP POST
+     */
     private function post($url, $param, $require_auth = true)
     {
         return $this->fetch($url, $param, 'POST', $require_auth);
     }
 
+    /**
+     * HTTP GET
+     */
     private function get($url, $param, $require_auth = true)
     {
         return $this->fetch($url, $param, 'GET', $require_auth);
     }
 
+    /**
+     * magic method
+     *
+     * Find method from this->method and call post or get method.
+     *
+     */
     public function __call($methodName, $args)
     {
         $methodName = preg_replace('/\_/', '/', $methodName);
