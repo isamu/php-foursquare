@@ -1,6 +1,6 @@
 <?PHP
 require_once("config.php");
-require_once("../foursquare.php");
+require_once("Services/Foursquare.php");
 require_once('HTTP/OAuth/Consumer.php');
 
 $oauth = new HTTP_OAuth_Consumer(ConsumerKey, ConsumerKeySecret);
@@ -27,7 +27,7 @@ $oauth->getAccessToken("http://foursquare.com/oauth/access_token", preg_replace(
 
 $oauth->setToken($oauth->getToken());
 $oauth->setTokenSecret($oauth->getTokenSecret());
-$forsq = new Foursquare($oauth);
+$forsq = new Services_Foursquare($oauth);
 
 $res = $forsq->findfriends_byname(array("q" => "isamu"));
 var_dump($res);

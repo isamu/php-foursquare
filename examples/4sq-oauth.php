@@ -1,6 +1,6 @@
 <?PHP
 require_once("config.php");
-require_once("../foursquare.php");
+require_once("Services/Foursquare.php");
 $oauth = new OAuth(ConsumerKey, ConsumerKeySecret,
                    OAUTH_SIG_METHOD_HMACSHA1,OAUTH_AUTH_TYPE_URI);
 
@@ -21,7 +21,7 @@ printf("Access token secret: %s\n",$access_token_info["oauth_token_secret"]);
 
 $oauth->setToken($access_token_info["oauth_token"],$access_token_info["oauth_token_secret"]);
 
-$forsq = new Foursquare($oauth);
+$forsq = new Services_Foursquare($oauth);
 $res = $forsq->venues(array("geolat" => 43.068982, 
                             "geolong" => 141.350613));
 
