@@ -15,7 +15,12 @@
 
 class Services_Foursquare
 {
-    
+    /**
+     * auth
+     *
+     * @var mixed $auth is OAuth object, 
+     * that is OAuth(pecl) or HTTP_OAuth_Consumer(pear)
+     */
     private $auth;
     /**
      * Base url
@@ -23,6 +28,14 @@ class Services_Foursquare
      * @var string $base_url of foursquare API
      */
     private $base_url = 'http://api.foursquare.com/v1/';
+    /**
+     * method list
+     *
+     * @var array method is all methods list.
+     * key of array is method name, 
+     * value of array is array( (strint) HTTP Method(s), 
+     *                          (bool) Requires Authentication)
+     */
     private $method = array('checkins' => array('get', true),
                             'checkin' => array('post', true),
                             'history' => array('get', true),
